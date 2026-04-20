@@ -3331,6 +3331,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1450982058}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &243614626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 243614628}
+  - component: {fileID: 243614627}
+  m_Layer: 0
+  m_Name: CrowdTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &243614627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243614626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4e02c4fa6bb1440823f512225c4cfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CrowdSphereSpawner
+  ambientNoiseMonitor: {fileID: 1104317715}
+  cameraTransform: {fileID: 1169946647}
+  spawnDistanceFromCamera: 0.5
+  sphereScale: 0.1
+  spawnIfCrowdAlreadyConfirmedOnEnable: 1
+  logSpawns: 1
+--- !u!4 &243614628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243614626}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.13591, y: 0.09514, z: 0.13591}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &253901501
 GameObject:
   m_ObjectHideFlags: 0
@@ -3674,7 +3724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DetectionReader
   metaAgent: {fileID: 1289562000}
   webcamAgent: {fileID: 1871444793}
-  allowWebcamFallback: 1
+  allowWebcamFallback: 0
   logDetectionBatches: 1
   logEachDetection: 1
 --- !u!1 &277662693
@@ -12908,6 +12958,92 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1099543595}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1104317712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1104317714}
+  - component: {fileID: 1104317713}
+  - component: {fileID: 1104317715}
+  m_Layer: 0
+  m_Name: PersonDetect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1104317713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104317712}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5a2c626640f55468eb355bccced045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaintingDetectionReader
+  agent: {fileID: 1289562000}
+  confidenceThreshold: 0.7
+  spawnDistanceFromCamera: 0.5
+  sphereScale: 0.1
+  onPaintingDetected:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &1104317714
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104317712}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.13591, y: 0.09514, z: 0.13591}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1104317715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104317712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd014fde1d35f2b4fb622e89a32da6e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmbientNoiseMonitor
+  detectionReader: {fileID: 272893713}
+  personConfidenceThreshold: 0.7
+  minPersonsForCrowd: 2
+  crowdConfirmHoldSeconds: 1
+  crowdClearCooldownSeconds: 1
+  microphoneDevice: 
+  startOnEnable: 1
+  sampleRate: 16000
+  clipLengthSeconds: 1
+  sampleWindowSize: 1024
+  analysisIntervalSeconds: 0.1
+  noisyThresholdDb: -35
+  logStateChanges: 1
+  onNoiseLevelUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  onNoiseStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onCrowdStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1104439505
 GameObject:
   m_ObjectHideFlags: 0
@@ -16428,7 +16564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1386766973
 Transform:
   m_ObjectHideFlags: 0
@@ -17427,7 +17563,7 @@ MonoBehaviour:
   CameraPosition: 0
   RequestedResolution: {x: 1280, y: 960}
   _maxFramerate: 60
-  TargetMaterial: {fileID: 0}
+  TargetMaterial: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   _texturePropertyName: 
 --- !u!114 &1483284173
 MonoBehaviour:
@@ -18264,7 +18400,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1574626892
 Transform:
   m_ObjectHideFlags: 0
@@ -18287,7 +18423,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1574626891}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 977657daacd54354a9e34999e6112aa6, type: 3}
   m_Name: 
@@ -21401,7 +21537,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1871444792
 Transform:
   m_ObjectHideFlags: 0
@@ -23771,3 +23907,5 @@ SceneRoots:
   - {fileID: 1289562002}
   - {fileID: 816037710}
   - {fileID: 1386766973}
+  - {fileID: 1104317714}
+  - {fileID: 243614628}
