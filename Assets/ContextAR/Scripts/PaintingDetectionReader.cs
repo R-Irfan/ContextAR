@@ -8,7 +8,8 @@ public class PaintingDetectionReader : MonoBehaviour
 {
     [SerializeField] private ObjectDetectionAgent agent;
     [SerializeField, Range(0f, 1f)] private float confidenceThreshold = 0.8f;
-    [SerializeField] private bool triggerOnlyOnEnter = true;
+    [SerializeField] private float spawnDistanceFromCamera = 0.5f;
+    [SerializeField] private float sphereScale = 0.1f;
 
     [System.Serializable]
     public class PaintingDetectedEvent : UnityEvent<float> { }
@@ -16,7 +17,7 @@ public class PaintingDetectionReader : MonoBehaviour
     [SerializeField] private PaintingDetectedEvent onPaintingDetected = new();
     public PaintingDetectedEvent OnPaintingDetected => onPaintingDetected;
 
-    private bool paintingDetectedLastFrame;
+    private int personCountLastFrame;
 
     private void OnEnable()
     {
@@ -36,7 +37,7 @@ public class PaintingDetectionReader : MonoBehaviour
 
     private void OnDetections(List<BoxData> boxes)
     {
-        var foundPainting = false;
+        var personCount = 0;
         var bestConfidence = 0f;
 
         if (boxes != null)
@@ -46,10 +47,10 @@ public class PaintingDetectionReader : MonoBehaviour
                 if (!TryParseLabelAndConfidence(detection.label, out var labelName, out var confidence))
                     continue;
 
-                if (labelName != "painting" || confidence < confidenceThreshold)
+                if (labelName != "person" || confidence < confidenceThreshold)
                     continue;
 
-                foundPainting = true;
+                personCount++;
                 if (confidence > bestConfidence)
                 {
                     bestConfidence = confidence;
@@ -57,13 +58,37 @@ public class PaintingDetectionReader : MonoBehaviour
             }
         }
 
-        if (foundPainting && (!triggerOnlyOnEnter || !paintingDetectedLastFrame))
+        // Spawn only for newly detected people so we do not create spheres every frame.
+        if (personCount > personCountLastFrame)
         {
+            var newPeopleCount = personCount - personCountLastFrame;
+            SpawnSpheresInFrontOfMainCamera(newPeopleCount);
             onPaintingDetected.Invoke(bestConfidence);
-            Debug.Log($"Painting detected with confidence {bestConfidence:0.00}");
+            Debug.Log($"Person detected with confidence {bestConfidence:0.00}. Spawned {newPeopleCount} sphere(s).");
         }
 
-        paintingDetectedLastFrame = foundPainting;
+        personCountLastFrame = personCount;
+    }
+
+    private void SpawnSpheresInFrontOfMainCamera(int count)
+    {
+        if (count <= 0)
+            return;
+
+        var mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogWarning("[PaintingDetectionReader] Cannot spawn sphere: no Main Camera found.");
+            return;
+        }
+
+        var spawnPosition = mainCamera.transform.position + mainCamera.transform.forward * spawnDistanceFromCamera;
+        for (var i = 0; i < count; i++)
+        {
+            var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.transform.position = spawnPosition;
+            sphere.transform.localScale = Vector3.one * sphereScale;
+        }
     }
 
     private static bool TryParseLabelAndConfidence(string rawLabel, out string labelName, out float confidence)
