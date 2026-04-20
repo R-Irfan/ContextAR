@@ -161,6 +161,48 @@ public class DetectionReader : MonoBehaviour
 
     public bool DetectSpecificObject(string objectName, float threshold)
     {
+        var detectedCount = CountSpecificObject(objectName, threshold);
+        if (detectedCount <= 0)
+        {
+            return false;
+        }
+
+        if (TryGetBestConfidenceForObject(objectName, threshold, out var bestConfidence))
+        {
+            OnSpecificObjectDetected(objectName.Trim().ToLowerInvariant(), bestConfidence); // your action
+        }
+
+        return true;
+    }
+
+    public int CountSpecificObject(string objectName, float threshold)
+    {
+        if (string.IsNullOrWhiteSpace(objectName))
+        {
+            return 0;
+        }
+
+        var targetName = objectName.Trim().ToLowerInvariant();
+        var detectedCount = 0;
+
+        foreach (var b in latestDetections)
+        {
+            if (!TryParseLabelAndConfidence(b.label, out var labelName, out var conf))
+                continue;
+
+            if (labelName == targetName && conf > threshold)
+            {
+                detectedCount++;
+            }
+        }
+
+        return detectedCount;
+    }
+
+    private bool TryGetBestConfidenceForObject(string objectName, float threshold, out float bestConfidence)
+    {
+        bestConfidence = 0f;
+
         if (string.IsNullOrWhiteSpace(objectName))
         {
             return false;
@@ -173,14 +215,16 @@ public class DetectionReader : MonoBehaviour
             if (!TryParseLabelAndConfidence(b.label, out var labelName, out var conf))
                 continue;
 
-            if (labelName == targetName && conf > threshold)
+            if (labelName != targetName || conf <= threshold)
+                continue;
+
+            if (conf > bestConfidence)
             {
-                OnSpecificObjectDetected(targetName, conf); // your action
-                return true;
+                bestConfidence = conf;
             }
         }
 
-        return false;
+        return bestConfidence > 0f;
     }
 
     private static bool TryParseLabelAndConfidence(string rawLabel, out string labelName, out float confidence)
