@@ -96,6 +96,8 @@ public class PaintingDetectionReader : MonoBehaviour
         labelName = string.Empty;
         confidence = 0f;
 
+        Debug.Log($"Parsing label: '{rawLabel}'");
+
         if (string.IsNullOrWhiteSpace(rawLabel))
             return false;
 

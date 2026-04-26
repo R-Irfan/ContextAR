@@ -1,3 +1,4 @@
+// ExperienceLayerController.cs
 using System.Collections;
 using System.Text;
 using UnityEngine;
@@ -5,31 +6,49 @@ using UnityEngine.Networking;
 
 public class ExperienceLayerController : MonoBehaviour
 {
-    [Header("Legacy /ask Pipeline")]
-    [SerializeField] private bool enableLegacyAskPipeline = false;
-    [SerializeField] private string legacyServerBaseUrl = "http://192.168.1.42:8000";
+    [Header("References")]
+    [SerializeField] private PassthroughScreenshotCapture capture;
+    [SerializeField] private AnchoredUiModeManager uiManager;
 
-    private bool _hasWarnedDisabledMode;
+    [Header("Backend")]
+    [SerializeField] private string serverUrl = "http://172.29.51.145:8000";
 
-    // Legacy path kept for reference. /qa flow should be used via SendToBackend.
-    public void OnVisitorQuestion(string question, string crowdLevel, string noiseLevel, bool bothHolding)
+    [Header("Debug")]
+    [SerializeField] private bool logServerResponses = true;
+
+    private bool _missingUiManagerWarningShown;
+
+    private void Awake()
     {
-        if (!enableLegacyAskPipeline)
+        if (capture == null)
         {
-            if (!_hasWarnedDisabledMode)
-            {
-                _hasWarnedDisabledMode = true;
-                Debug.LogWarning("ExperienceLayerController: Legacy /ask pipeline is disabled. Use SendToBackend (/ask) instead.");
-            }
-
-            return;
+            capture = FindAnyObjectByType<PassthroughScreenshotCapture>();
         }
 
-        StartCoroutine(AskServer(question, crowdLevel, noiseLevel, bothHolding));
+        if (uiManager == null)
+        {
+            uiManager = FindAnyObjectByType<AnchoredUiModeManager>();
+        }
     }
 
-    private IEnumerator AskServer(string question, string crowd, string noise, bool bothHolding)
+    // Call this when the visitor asks a question.
+    public void OnVisitorQuestion(string question, float gazeDuration, string crowdLevel, string noiseLevel, bool sendImage = false)
     {
+        StartCoroutine(AskServer(question, gazeDuration, crowdLevel, noiseLevel, sendImage));
+    }
+
+    private IEnumerator AskServer(string question, float gazeDuration, string crowd, string noise, bool sendImage)
+    {
+        string imageBase64 = null;
+        if (capture != null && sendImage)
+        {
+            yield return capture.CaptureScreenshotBase64(base64 => imageBase64 = base64);
+        }
+        else if (sendImage)
+        {
+            Debug.LogWarning("[ExperienceLayerController] PassthroughScreenshotCapture reference is missing. Sending request without image.");
+        }
+
         var body = new AskRequest
         {
             question = question,
@@ -37,13 +56,17 @@ public class ExperienceLayerController : MonoBehaviour
             {
                 crowd = crowd,
                 noise = noise,
-                detected = true,
-                both_holding = bothHolding
-            }
+                gaze_duration = gazeDuration
+            },
+            image_base64 = imageBase64// Optional exhibit image for recognition
+            
         };
-
+        Debug.Log($"Serialized AskRequest JSON: {JsonUtility.ToJson(body)}");
+        Debug.Log("crowd: " + body.state.crowd);
+        Debug.Log("noise: " + body.state.noise);
+        Debug.Log("gaze_duration: " + body.state.gaze_duration);
         string json = JsonUtility.ToJson(body);
-        var req = new UnityWebRequest($"{legacyServerBaseUrl}/ask", UnityWebRequest.kHttpVerbPOST);
+        using var req = new UnityWebRequest($"{serverUrl}/ask", UnityWebRequest.kHttpVerbPOST);
         req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
         req.downloadHandler = new DownloadHandlerBuffer();
         req.SetRequestHeader("Content-Type", "application/json");
@@ -52,70 +75,117 @@ public class ExperienceLayerController : MonoBehaviour
 
         if (req.result == UnityWebRequest.Result.Success)
         {
+            if (logServerResponses)
+            {
+                Debug.Log($"[ExperienceLayerController] /ask raw response: {req.downloadHandler.text}");
+            }
+
             var resp = JsonUtility.FromJson<AskResponse>(req.downloadHandler.text);
             HandleResponse(resp);
-        }
-        else
-        {
-            Debug.LogError("ExperienceLayerController: /ask request failed -> " + req.error);
+            yield break;
         }
 
-        req.Dispose();
+        Debug.LogWarning($"[ExperienceLayerController] Request failed: {req.error}");
     }
 
     private void HandleResponse(AskResponse resp)
     {
         if (resp == null)
         {
+            Debug.LogWarning("[ExperienceLayerController] Parsed response is null.");
             return;
+        }
+
+        if (logServerResponses)
+        {
+            Debug.Log($"[ExperienceLayerController] Parsed mode={resp.mode}, answer=\"{resp.answer}\", exhibit=\"{resp.exhibit}\"");
         }
 
         switch (resp.mode)
         {
-            case "FULL_VOICE":
-                ShowFullOverlay(resp.answer);
-                if (!string.IsNullOrEmpty(resp.audio_url))
-                {
-                    StartCoroutine(PlayAudio($"{legacyServerBaseUrl}{resp.audio_url}"));
-                }
+            case "NO_RESPONSE":
+                // Do nothing - visitor is passing by
+                break;
+
+            case "GLANCE_CARD":
+                ShowGlanceCard(resp.answer);
                 break;
 
             case "BRIEF_TEXT":
                 ShowBriefText(resp.answer);
                 break;
 
-            case "XR_MENU":
-                ShowXRMenu();
+            case "FULL_VOICE":
+                ShowFullOverlay(resp.answer);
+                break;
+
+            case "BRIEF_TEXT_PROMPT":
+                ShowBriefText(resp.answer); // answer already includes quiet-spot nudge
+                break;
+
+            default:
+                Debug.LogWarning($"[ExperienceLayerController] Unknown mode received: {resp.mode}");
                 break;
         }
-    }
 
-    private IEnumerator PlayAudio(string url)
-    {
-        using (var req = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG))
+        if (!string.IsNullOrEmpty(resp.exhibit))
         {
-            yield return req.SendWebRequest();
-
-            if (req.result == UnityWebRequest.Result.Success)
+            if (logServerResponses)
             {
-                var clip = DownloadHandlerAudioClip.GetContent(req);
-                var source = GetComponent<AudioSource>();
-                if (source == null)
-                {
-                    source = gameObject.AddComponent<AudioSource>();
-                }
-
-                source.clip = clip;
-                source.Play();
+                Debug.Log($"[ExperienceLayerController] Setting painting from exhibit: {resp.exhibit}");
             }
-            else
+
+            if (StateManager.Instance != null)
             {
-                Debug.LogError("ExperienceLayerController: Audio playback download failed -> " + req.error);
+                StateManager.Instance.SetPainting(resp.exhibit);
             }
         }
     }
 
-    private void ShowFullOverlay(string text) { /* update your UI panel */ }
-    private void ShowBriefText(string text) { /* update your UI panel */ }
-    private void ShowXRMenu() { /* activate your XR menu GameObject */ }
+    private void ShowGlanceCard(string text)
+    {
+        if (uiManager == null)
+        {
+            WarnMissingUiManager();
+            return;
+        }
+
+        uiManager.SetMinimalText(text);
+        uiManager.RefreshModeFromState();
+    }
+
+    private void ShowBriefText(string text)
+    {
+        if (uiManager == null)
+        {
+            WarnMissingUiManager();
+            return;
+        }
+
+        uiManager.SetShortText(text);
+        uiManager.RefreshModeFromState();
+    }
+
+    private void ShowFullOverlay(string text)
+    {
+        if (uiManager == null)
+        {
+            WarnMissingUiManager();
+            return;
+        }
+
+        uiManager.SetFullText(text);
+        uiManager.RefreshModeFromState();
+    }
+
+    private void WarnMissingUiManager()
+    {
+        if (_missingUiManagerWarningShown)
+        {
+            return;
+        }
+
+        _missingUiManagerWarningShown = true;
+        Debug.LogWarning("[ExperienceLayerController] AnchoredUiModeManager reference is missing.");
+    }
 }

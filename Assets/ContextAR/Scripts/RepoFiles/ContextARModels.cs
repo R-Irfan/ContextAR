@@ -1,18 +1,31 @@
-// ContextARModels.cs
 using System;
 
-[Serializable] public class HandState   { public bool detected; public bool both_holding; }
-[Serializable] public class CrowdState  { public int count; public string level; }
-[Serializable] public class NoiseState  { public float db; public string level; }
-[Serializable] public class StateResponse
+[Serializable]
+public class AskState
 {
-    public float     timestamp;
-    public HandState hands;
-    public CrowdState crowd;
-    public NoiseState noise;
-    public string    suggestion;
+    public string crowd;          // "low" | "moderate" | "crowded"
+    public string noise;          // "quiet" | "moderate" | "noisy"
+    public float  gaze_duration;  // seconds
 }
 
-[Serializable] public class AskState   { public string crowd; public string noise; public bool detected; public bool both_holding; }
-[Serializable] public class AskRequest { public string question; public string image_base64; public AskState state; }
-[Serializable] public class AskResponse{ public string mode; public string answer; public string audio_url; public string exhibit; }
+[Serializable]
+public class AskRequest
+{
+    public string   question;
+    public string   image_base64;  // optional — omit to skip exhibit recognition
+    public AskState state;
+}
+
+[Serializable]
+public class AskResponse
+{
+    public string mode;     // NO_RESPONSE | BRIEF_TEXT | GLANCE_CARD | FULL_VOICE | BRIEF_TEXT_PROMPT
+    public string answer;   // empty for NO_RESPONSE
+    public string exhibit;  // recognised exhibit name; empty if not identified
+}
+
+[Serializable]
+public class SetPaintingRequest
+{
+    public string painting_name;
+}

@@ -7,11 +7,6 @@ public class AmbientNoiseMonitor : MonoBehaviour
     [Header("Person Detection")]
     [SerializeField] private DetectionReader detectionReader;
     [SerializeField, Range(0f, 1f)] private float personConfidenceThreshold = 0.7f;
-    [SerializeField, Min(1)] private int minPersonsForCrowd = 2;
-
-    [Header("Crowd Confirmation")]
-    [SerializeField, Min(0f)] private float crowdConfirmHoldSeconds = 1.0f;
-    [SerializeField, Min(0f)] private float crowdClearCooldownSeconds = 1.0f;
 
     [Header("Microphone")]
     [Tooltip("Leave empty to use the system default microphone.")]
@@ -23,8 +18,6 @@ public class AmbientNoiseMonitor : MonoBehaviour
     [Header("Analysis")]
     [SerializeField, Min(64)] private int sampleWindowSize = 1024;
     [SerializeField, Min(0.01f)] private float analysisIntervalSeconds = 0.1f;
-    [Tooltip("Environment is considered noisy when current dB is greater than or equal to this threshold.")]
-    [SerializeField] private float noisyThresholdDb = -35f;
 
     [Header("Debug")]
     [SerializeField] private bool logStateChanges = true;
@@ -44,19 +37,25 @@ public class AmbientNoiseMonitor : MonoBehaviour
     public bool IsMonitoring => _micClip != null;
     public bool IsNoisy { get; private set; }
     public bool IsCrowdConfirmed { get; private set; }
+    public string CurrentNoiseLevel { get; private set; } = NoiseQuiet;
+    public string CurrentCrowdLevel { get; private set; } = CrowdLow;
     public int CurrentPersonCount { get; private set; }
     public float CurrentRms { get; private set; }
     public float CurrentDb { get; private set; } = -80f;
     public string ActiveDeviceName => _activeDeviceName;
 
     private const float MinRms = 1e-7f;
+    private const string CrowdLow = "low";
+    private const string CrowdModerate = "moderate";
+    private const string CrowdCrowded = "crowded";
+    private const string NoiseQuiet = "quiet";
+    private const string NoiseModerate = "moderate";
+    private const string NoiseNoisy = "noisy";
 
     private AudioClip _micClip;
     private string _activeDeviceName;
     private float _timer;
     private float[] _samples;
-    private float _crowdHoldTimer;
-    private float _crowdClearTimer;
     private bool _missingDetectionReaderWarningShown;
 
     private void Awake()
@@ -92,10 +91,9 @@ public class AmbientNoiseMonitor : MonoBehaviour
         {
             return;
         }
-        var elapsedSeconds = _timer;
         _timer = 0f;
 
-        AnalyzeNoiseLevel(elapsedSeconds);
+        AnalyzeNoiseLevel();
     }
 
     public bool StartMonitoring()
@@ -141,12 +139,18 @@ public class AmbientNoiseMonitor : MonoBehaviour
         _activeDeviceName = null;
         _samples = null;
         IsNoisy = false;
+        CurrentNoiseLevel = NoiseQuiet;
         IsCrowdConfirmed = false;
+        CurrentCrowdLevel = CrowdLow;
         CurrentPersonCount = 0;
         CurrentRms = 0f;
         CurrentDb = -80f;
-        _crowdHoldTimer = 0f;
-        _crowdClearTimer = 0f;
+
+        if (StateManager.Instance != null)
+        {
+            StateManager.Instance.SetNoise(CurrentNoiseLevel);
+            StateManager.Instance.SetCrowd(CurrentCrowdLevel);
+        }
     }
 
     public bool HasMicrophoneDevices()
@@ -176,7 +180,7 @@ public class AmbientNoiseMonitor : MonoBehaviour
         return devices[0];
     }
 
-    private void AnalyzeNoiseLevel(float elapsedSeconds)
+    private void AnalyzeNoiseLevel()
     {
         if (_micClip == null || _samples == null || _samples.Length == 0)
         {
@@ -224,58 +228,69 @@ public class AmbientNoiseMonitor : MonoBehaviour
         CurrentRms = Mathf.Sqrt((float)(sumSquares / window));
         CurrentDb = 20f * Mathf.Log10(Mathf.Max(CurrentRms, MinRms));
 
-        bool noisyNow = CurrentDb >= noisyThresholdDb;
-        if (noisyNow != IsNoisy)
+        var nextNoiseLevel = EvaluateNoiseLevel(CurrentDb);
+        bool noisyNow = nextNoiseLevel == NoiseNoisy;
+        var levelChanged = !string.Equals(CurrentNoiseLevel, nextNoiseLevel, StringComparison.Ordinal);
+        var noisyStateChanged = noisyNow != IsNoisy;
+        if (levelChanged)
+        {
+            CurrentNoiseLevel = nextNoiseLevel;
+            if (StateManager.Instance != null)
+            {
+                StateManager.Instance.SetNoise(CurrentNoiseLevel);
+            }
+        }
+
+        if (noisyStateChanged)
         {
             IsNoisy = noisyNow;
             onNoiseStateChanged.Invoke(IsNoisy, CurrentDb);
+        }
 
-            if (logStateChanges)
-            {
-                Debug.Log($"[AmbientNoiseMonitor] NoiseState={IsNoisy} dB={CurrentDb:0.00} device={_activeDeviceName}");
-            }
+        if (logStateChanges && (levelChanged || noisyStateChanged))
+        {
+            Debug.Log($"[AmbientNoiseMonitor] NoiseLevel={CurrentNoiseLevel} NoiseState={IsNoisy} dB={CurrentDb:0.00} device={_activeDeviceName}");
         }
 
         onNoiseLevelUpdated.Invoke(CurrentDb, CurrentRms);
-        EvaluateCrowdConfirmation(elapsedSeconds);
+        EvaluateCrowdConfirmation();
     }
 
-    private void EvaluateCrowdConfirmation(float elapsedSeconds)
+    private static string EvaluateNoiseLevel(float db)
+    {
+        if (db > -20f)
+        {
+            return NoiseQuiet;
+        }
+
+        if (db > -80f)
+        {
+            return NoiseModerate;
+        }
+
+        return NoiseNoisy;
+    }
+
+    private void EvaluateCrowdConfirmation()
     {
         CurrentPersonCount = CountDetectedPeople();
-        bool conditionsMet = IsNoisy && CurrentPersonCount >= minPersonsForCrowd;
+        var nextLevel = EvaluateCrowdLevel(CurrentPersonCount);
+        SetCrowdState(nextLevel);
+    }
 
-        if (!IsCrowdConfirmed)
+    private static string EvaluateCrowdLevel(int personCount)
+    {
+        if (personCount <= 0)
         {
-            _crowdClearTimer = 0f;
-            if (!conditionsMet)
-            {
-                _crowdHoldTimer = 0f;
-                return;
-            }
-
-            _crowdHoldTimer += elapsedSeconds;
-            if (_crowdHoldTimer >= crowdConfirmHoldSeconds)
-            {
-                SetCrowdState(true);
-                _crowdHoldTimer = 0f;
-            }
-            return;
+            return CrowdLow;
         }
 
-        _crowdHoldTimer = 0f;
-        if (conditionsMet)
+        if (personCount <= 2)
         {
-            _crowdClearTimer = 0f;
-            return;
+            return CrowdModerate;
         }
 
-        _crowdClearTimer += elapsedSeconds;
-        if (_crowdClearTimer >= crowdClearCooldownSeconds)
-        {
-            SetCrowdState(false);
-            _crowdClearTimer = 0f;
-        }
+        return CrowdCrowded;
     }
 
     private int CountDetectedPeople()
@@ -285,7 +300,7 @@ public class AmbientNoiseMonitor : MonoBehaviour
             if (!_missingDetectionReaderWarningShown)
             {
                 _missingDetectionReaderWarningShown = true;
-                Debug.LogWarning("[AmbientNoiseMonitor] DetectionReader is missing. Crowd confirmation will remain false.");
+                Debug.LogWarning("[AmbientNoiseMonitor] DetectionReader is missing. Crowd level defaults to low.");
             }
             return 0;
         }
@@ -293,19 +308,35 @@ public class AmbientNoiseMonitor : MonoBehaviour
         return detectionReader.CountSpecificObject("person", personConfidenceThreshold);
     }
 
-    private void SetCrowdState(bool isCrowdConfirmed)
+    private void SetCrowdState(string crowdLevel)
     {
-        if (IsCrowdConfirmed == isCrowdConfirmed)
+        if (string.IsNullOrWhiteSpace(crowdLevel))
         {
             return;
         }
 
+        var normalizedLevel = crowdLevel.Trim().ToLowerInvariant();
+        var isCrowdConfirmed = normalizedLevel == CrowdCrowded;
+        var levelChanged = !string.Equals(CurrentCrowdLevel, normalizedLevel, StringComparison.Ordinal);
+        var boolChanged = IsCrowdConfirmed != isCrowdConfirmed;
+
+        if (!levelChanged && !boolChanged)
+        {
+            return;
+        }
+
+        CurrentCrowdLevel = normalizedLevel;
         IsCrowdConfirmed = isCrowdConfirmed;
         onCrowdStateChanged.Invoke(IsCrowdConfirmed, CurrentPersonCount, CurrentDb);
 
+        if (StateManager.Instance != null)
+        {
+            StateManager.Instance.SetCrowd(CurrentCrowdLevel);
+        }
+
         if (logStateChanges)
         {
-            Debug.Log($"[AmbientNoiseMonitor] CrowdState={IsCrowdConfirmed} people={CurrentPersonCount} dB={CurrentDb:0.00}");
+            Debug.Log($"[AmbientNoiseMonitor] CrowdLevel={CurrentCrowdLevel} CrowdState={IsCrowdConfirmed} people={CurrentPersonCount} dB={CurrentDb:0.00}");
         }
     }
 }

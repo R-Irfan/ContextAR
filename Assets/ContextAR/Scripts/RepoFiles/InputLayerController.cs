@@ -10,34 +10,15 @@ public class InputLayerController : MonoBehaviour
     [SerializeField] private bool runConnectionTestOnStart = true;
 
     public bool HasLatestState => _hasLatestState;
-    public StateResponse LatestState => _latestState;
+    //public StateResponse LatestState => _latestState;
 
-    private StateResponse _latestState;
+    //private StateResponse _latestState;
     private bool _hasLatestState;
 
     private void Start()
     {
-        StartCoroutine(PollState());
-        if (runConnectionTestOnStart)
-        {
-            StartCoroutine(TestConnection());
-        }
-    }
-
-    public AskState GetLatestAskState()
-    {
-        if (!_hasLatestState || _latestState == null)
-        {
-            return BuildFallbackAskState();
-        }
-
-        return new AskState
-        {
-            crowd = string.IsNullOrWhiteSpace(_latestState.crowd?.level) ? "unknown" : _latestState.crowd.level,
-            noise = string.IsNullOrWhiteSpace(_latestState.noise?.level) ? "unknown" : _latestState.noise.level,
-            detected = _latestState.hands != null && _latestState.hands.detected,
-            both_holding = _latestState.hands != null && _latestState.hands.both_holding
-        };
+        StartCoroutine(TestConnection());
+        
     }
 
     private IEnumerator TestConnection()
@@ -60,59 +41,23 @@ public class InputLayerController : MonoBehaviour
         req.Dispose();
     }
 
-    private IEnumerator PollState()
-    {
-        while (true)
-        {
-            var req = UnityWebRequest.Get($"{serverBaseUrl}/state");
-            yield return req.SendWebRequest();
 
-            if (req.result == UnityWebRequest.Result.Success)
-            {
-                var state = JsonUtility.FromJson<StateResponse>(req.downloadHandler.text);
-                if (state != null)
-                {
-                    _latestState = state;
-                    _hasLatestState = true;
-                    UpdateInputMode(state);
-                }
-            }
-            else
-            {
-                Debug.LogWarning("InputLayerController: Poll /state failed -> " + req.error);
-            }
 
-            req.Dispose();
-            yield return new WaitForSeconds(pollIntervalSeconds);
-        }
-    }
-
-    private static AskState BuildFallbackAskState()
-    {
-        return new AskState
-        {
-            crowd = "unknown",
-            noise = "unknown",
-            detected = false,
-            both_holding = false
-        };
-    }
-
-    private static void UpdateInputMode(StateResponse state)
+    private static void UpdateInputMode(AskState state)//StateResponse state
     {
         if (state == null)
         {
             return;
         }
 
-        if (state.hands != null && state.hands.both_holding)
-        {
+        //if (state.hands != null && state.hands.both_holding)
+        //{
             // Switch to eye / head gaze interaction
-        }
-        else if (state.noise != null && state.noise.level == "noisy")
-        {
-            // Disable voice, use gaze only
-        }
+        //}
+        //else if (state.noise != null && state.noise.level == "noisy")
+        //{
+        //    // Disable voice, use gaze only
+        //}
         else
         {
             // Full voice input

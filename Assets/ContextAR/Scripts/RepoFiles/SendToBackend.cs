@@ -149,15 +149,15 @@ public class SendToBackend : MonoBehaviour
     {
         if (inputLayerController != null)
         {
-            return inputLayerController.GetLatestAskState();
+            //return inputLayerController.GetLatestAskState();
         }
 
         return new AskState
         {
             crowd = "unknown",
             noise = "unknown",
-            detected = false,
-            both_holding = false
+            //detected = false,
+            //both_holding = false
         };
     }
 
