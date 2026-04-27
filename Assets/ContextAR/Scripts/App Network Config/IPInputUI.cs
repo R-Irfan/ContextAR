@@ -32,7 +32,7 @@ public class IPInputUI : MonoBehaviour
             AppConfig.SetIP(ip+":8000");
             //experienceLayerController.serverUrl = AppConfig.GetIp();
             SetStatus("IP Saved", Color.green);
-
+            StartCoroutine(HideAPPConfigUI());
         }
         else
         {
