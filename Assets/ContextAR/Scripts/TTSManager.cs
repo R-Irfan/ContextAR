@@ -15,12 +15,6 @@ public class TTSManager : MonoBehaviour
     }
 
 
-    private void Start()
-    {
-        Debug.Log("TTS Speaking");
-        Speak("Welcome, You can ask me about any Painting in this museum");
-    }
-
     public void Speak(string text)
     {
         if (string.IsNullOrEmpty(text))

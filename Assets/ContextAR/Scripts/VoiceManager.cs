@@ -21,7 +21,7 @@ public class VoiceManager : MonoBehaviour
 
     public string question;
 
-    public TTSManager ttsManager;
+    //public TTSManager ttsManager;
     public AppVoiceExperience wit;
     private bool isListening;
 
@@ -103,7 +103,7 @@ public class VoiceManager : MonoBehaviour
     {
         question = transcription;
         Debug.Log("QUestion to Ask: " + question);
-        ttsManager.Speak("You said, " + question);
+        //ttsManager.Speak("You said, " + question);
     }
 
     private void OnStoppedListening()
