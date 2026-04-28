@@ -23,13 +23,13 @@ public class ObjectDetectionDwellTracker : MonoBehaviour
     [SerializeField] private WebcamObjectDetectionAgent webcamAgent;
 
     [Header("Target")]
-    [SerializeField] private string targetLabel = "tv monitor";
+    [SerializeField] private string targetLabel = "laptop";
     [SerializeField, Range(0f, 1f)] private float minConfidence = 0.7f;
 
     [Header("Dwell Thresholds (seconds)")]
     [SerializeField, Min(0f)] private float shortThresholdSeconds = 5f;
     [SerializeField, Min(0f)] private float longThresholdSeconds = 15f;
-    [SerializeField, Min(0f)] private float missingGraceSeconds = 0.35f;
+    [SerializeField, Min(0f)] private float missingGraceSeconds = 2f;
 
     [Header("Events")]
     [SerializeField] private DwellRangeChangedEvent onDwellRangeChanged = new();
@@ -205,7 +205,7 @@ public class ObjectDetectionDwellTracker : MonoBehaviour
 
         _currentRange = nextRange;
         onDwellRangeChanged.Invoke(_currentRange, _currentDwellSeconds);
-        //StateManager.Instance.SetGaze(_currentDwellSeconds);
+        StateManager.Instance.SetGaze(_currentDwellSeconds);
 
         if (!logRangeChanges)
         {

@@ -40,7 +40,7 @@ public class AnchoredUiModeManager : MonoBehaviour
     [SerializeField] private bool hideAllOnEnable = true;
     [SerializeField] private bool enableFadeTransitions = true;
     [SerializeField] private bool enableAutoHide = true;
-    [SerializeField, Min(0f)] private float fadeDurationSeconds = 0.2f;
+    [SerializeField, Min(0f)] private float fadeDurationSeconds = 0.8f;
 
     [Header("Context Mapping")]
     [SerializeField] private bool autoSelectModeFromState = true;
@@ -206,7 +206,7 @@ public class AnchoredUiModeManager : MonoBehaviour
 
     private void HideAllImmediate()
     {
-        CancelRunningRoutines();
+        //CancelRunningRoutines();
 
         HideMode(minimalUi);
         HideMode(shortUi);
@@ -216,7 +216,7 @@ public class AnchoredUiModeManager : MonoBehaviour
 
     private void BeginModeTransition(UiMode targetMode, string message)
     {
-        CancelRunningRoutines();
+        //CancelRunningRoutines();
         _transitionRoutine = StartCoroutine(TransitionToMode(targetMode, message));
     }
 

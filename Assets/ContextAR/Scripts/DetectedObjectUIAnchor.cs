@@ -38,7 +38,7 @@ public class DetectedObjectUIAnchor : MonoBehaviour
     [SerializeField] private ObjectDetectionAgent detectionAgent;
     [SerializeField] private ObjectDetectionVisualizer detectionVisualizer;
     [SerializeField] private TextAsset classLabelsFile;
-    [SerializeField] private List<string> targetLabels = new List<string> { "person" };
+    [SerializeField] private List<string> targetLabels = new List<string> { "laptop" };
     [SerializeField, Range(0f, 1f)] private float confidenceThreshold = 0.7f;
     [SerializeField] private bool useAllLabelsWhenSelectionEmpty;
 
@@ -52,11 +52,11 @@ public class DetectedObjectUIAnchor : MonoBehaviour
 
     [Header("Smoothing")]
     [SerializeField] private bool enableSmoothing = true;
-    [SerializeField, Min(0f)] private float positionSmoothTime = 0.08f;
+    [SerializeField, Min(0f)] private float positionSmoothTime = 2f;
     [SerializeField, Min(0f)] private float rotationSmoothSpeed = 12f;
     [FormerlySerializedAs("boxHeightSmoothTime")]
-    [SerializeField, Min(0f)] private float boxScaleSmoothTime = 0.08f;
-    [SerializeField, Min(0f)] private float lostTargetHoldTime = 0.2f;
+    [SerializeField, Min(0f)] private float boxScaleSmoothTime = 2f;
+    [SerializeField, Min(0f)] private float lostTargetHoldTime = 2f;
 
     [SerializeField, HideInInspector] private List<string> availableLabels = new List<string>();
 

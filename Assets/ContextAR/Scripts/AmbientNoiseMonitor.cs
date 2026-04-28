@@ -258,15 +258,11 @@ public class AmbientNoiseMonitor : MonoBehaviour
 
     private static string EvaluateNoiseLevel(float db)
     {
-        if (db > -20f)
-        {
+        if (db < -50f)
             return NoiseQuiet;
-        }
 
-        if (db > -80f)
-        {
+        if (db < -25f)
             return NoiseModerate;
-        }
 
         return NoiseNoisy;
     }
@@ -285,7 +281,7 @@ public class AmbientNoiseMonitor : MonoBehaviour
             return CrowdLow;
         }
 
-        if (personCount <= 2)
+        if (personCount <= 1)
         {
             return CrowdModerate;
         }

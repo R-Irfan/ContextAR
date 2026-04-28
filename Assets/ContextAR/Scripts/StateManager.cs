@@ -11,7 +11,7 @@ public class StateManager : MonoBehaviour
         Instance = this;
         CurrentState.crowd = "low";
         CurrentState.noise = "quiet";
-        CurrentState.gaze_duration = 10f;
+        CurrentState.gaze_duration = 0f;
     }
 
     public void SetCrowd(string level)
@@ -27,7 +27,7 @@ public class StateManager : MonoBehaviour
 
     public void SetGaze(float seconds)
     {
-        CurrentState.gaze_duration = 10f;
+        CurrentState.gaze_duration = seconds;
     }
 
     public void SetPainting(string paintingName)
