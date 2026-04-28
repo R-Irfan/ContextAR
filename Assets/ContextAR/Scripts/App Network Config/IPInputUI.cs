@@ -30,7 +30,7 @@ public class IPInputUI : MonoBehaviour
         if (IPValidator.IsValidIPv4(ip))
         {
             AppConfig.SetIP(ip+":8000");
-            //experienceLayerController.serverUrl = AppConfig.GetIp();
+            experienceLayerController.serverUrl = AppConfig.GetIP();
             SetStatus("IP Saved", Color.green);
             StartCoroutine(HideAPPConfigUI());
         }

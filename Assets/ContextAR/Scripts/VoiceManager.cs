@@ -21,9 +21,11 @@ public class VoiceManager : MonoBehaviour
 
     public string question;
 
-    //public TTSManager ttsManager;
+    public TTSManager ttsManager;
     public AppVoiceExperience wit;
+    public ExperienceLayerController experience;
     private bool isListening;
+
 
     private void Start()
     {
@@ -49,6 +51,11 @@ public class VoiceManager : MonoBehaviour
         
     }
 
+    public void StartConversation()
+    {
+        ttsManager.Speak("What would you like to know?");
+        //
+    }
 
     public void AskQuestion()
     {
@@ -103,6 +110,7 @@ public class VoiceManager : MonoBehaviour
     {
         question = transcription;
         Debug.Log("QUestion to Ask: " + question);
+        SubmitQuestion(question);
         //ttsManager.Speak("You said, " + question);
     }
 
@@ -117,6 +125,15 @@ public class VoiceManager : MonoBehaviour
     {
         Debug.Log($"Error: {error} - {message}");
        
+    }
+
+    public void SubmitQuestion(string questionSubmit)
+    {
+        var state = StateManager.Instance.CurrentState;
+        var gazeDuration = Mathf.Max(0f, state.gaze_duration);
+        var crowdLevel = state.crowd;
+        var noiseLevel = state.noise;
+        experience.OnVisitorQuestion(questionSubmit,gazeDuration,crowdLevel,noiseLevel,true);
     }
 
     private void OnDestroy()

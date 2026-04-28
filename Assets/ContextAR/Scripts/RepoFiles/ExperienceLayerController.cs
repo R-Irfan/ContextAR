@@ -9,9 +9,10 @@ public class ExperienceLayerController : MonoBehaviour
     [Header("References")]
     [SerializeField] private PassthroughScreenshotCapture capture;
     [SerializeField] private AnchoredUiModeManager uiManager;
+    public TTSManager ttsManager;
 
     [Header("Backend")]
-    [SerializeField] private string serverUrl = "http://172.29.51.145:8000";
+    [SerializeField] public string serverUrl = "http://172.29.51.145:8000";
 
     [Header("Debug")]
     [SerializeField] private bool logServerResponses = true;
@@ -109,18 +110,22 @@ public class ExperienceLayerController : MonoBehaviour
 
             case "GLANCE_CARD":
                 ShowGlanceCard(resp.answer);
+                ttsManager.Speak(resp.answer);
                 break;
 
             case "BRIEF_TEXT":
                 ShowBriefText(resp.answer);
+                ttsManager.Speak(resp.answer);
                 break;
 
             case "FULL_VOICE":
                 ShowFullOverlay(resp.answer);
+                ttsManager.Speak(resp.answer);
                 break;
 
             case "BRIEF_TEXT_PROMPT":
                 ShowBriefText(resp.answer); // answer already includes quiet-spot nudge
+                ttsManager.Speak(resp.answer);
                 break;
 
             default:
@@ -151,7 +156,7 @@ public class ExperienceLayerController : MonoBehaviour
         }
 
         uiManager.SetMinimalText(text);
-        uiManager.RefreshModeFromState();
+        //uiManager.RefreshModeFromState();
     }
 
     private void ShowBriefText(string text)
@@ -163,7 +168,7 @@ public class ExperienceLayerController : MonoBehaviour
         }
 
         uiManager.SetShortText(text);
-        uiManager.RefreshModeFromState();
+        //uiManager.RefreshModeFromState();
     }
 
     private void ShowFullOverlay(string text)
@@ -175,7 +180,7 @@ public class ExperienceLayerController : MonoBehaviour
         }
 
         uiManager.SetFullText(text);
-        uiManager.RefreshModeFromState();
+        //uiManager.RefreshModeFromState();
     }
 
     private void WarnMissingUiManager()

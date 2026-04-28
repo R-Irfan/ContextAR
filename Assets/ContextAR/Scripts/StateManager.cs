@@ -5,6 +5,7 @@ public class StateManager : MonoBehaviour
     public static StateManager Instance;
 
     public AskState CurrentState = new AskState();
+    public AskResponse CurrentResponse = new AskResponse();
 
     void Awake()
     {
@@ -12,6 +13,7 @@ public class StateManager : MonoBehaviour
         CurrentState.crowd = "low";
         CurrentState.noise = "quiet";
         CurrentState.gaze_duration = 0f;
+        CurrentResponse.exhibit = "";
     }
 
     public void SetCrowd(string level)
@@ -34,5 +36,6 @@ public class StateManager : MonoBehaviour
     {
         // This can be used to track which painting the visitor is looking at,
         // if exhibit-specific behavior is desired.
+        CurrentResponse.exhibit += paintingName;
     }
 }

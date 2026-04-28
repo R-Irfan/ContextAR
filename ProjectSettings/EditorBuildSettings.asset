@@ -5,6 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/ContextAR/Scenes/ConnectToServer.unity
+    guid: ebe8e68de0a83f14eb7bde557d794cd2
   - enabled: 1
     path: Assets/ContextAR/Scenes/Main.unity
     guid: ea6a8389d4b7d6d4781653d0c88d9d1b

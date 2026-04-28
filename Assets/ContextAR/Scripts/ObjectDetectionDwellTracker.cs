@@ -21,6 +21,7 @@ public class ObjectDetectionDwellTracker : MonoBehaviour
     [Header("Detection Source")]
     [SerializeField] private ObjectDetectionAgent metaAgent;
     [SerializeField] private WebcamObjectDetectionAgent webcamAgent;
+    [SerializeField] private ExperienceLayerController experienceLayerController;
 
     [Header("Target")]
     [SerializeField] private string targetLabel = "laptop";
@@ -45,6 +46,8 @@ public class ObjectDetectionDwellTracker : MonoBehaviour
     private DwellRange _currentRange = DwellRange.NotDetected;
     [SerializeField] private float interactionFreezeSeconds = 2f;
     private float _freezeUntilTime = -1f;
+
+    private bool _hasTriggeredFirstRecognition;
 
     public DwellRange CurrentRange => _currentRange;
     public float CurrentDwellSeconds => _currentDwellSeconds;
@@ -143,6 +146,11 @@ public class ObjectDetectionDwellTracker : MonoBehaviour
             }
 
             foundTarget = true;
+            if (!_hasTriggeredFirstRecognition)
+            {
+                _hasTriggeredFirstRecognition = true;
+                experienceLayerController.OnVisitorQuestion("what painting is this",5,"low","quiet",true);
+            }
             break;
         }
 
@@ -174,6 +182,9 @@ public class ObjectDetectionDwellTracker : MonoBehaviour
             _isTargetDetected = false;
             _currentDwellSeconds = 0f;
             _dwellStartTime = float.NegativeInfinity;
+
+            _hasTriggeredFirstRecognition = false; // reset session trigger
+
             SetRange(DwellRange.NotDetected);
             return;
         }
