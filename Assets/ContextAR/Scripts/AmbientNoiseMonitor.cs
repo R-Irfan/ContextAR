@@ -261,7 +261,7 @@ public class AmbientNoiseMonitor : MonoBehaviour
         if (db < -50f)
             return NoiseQuiet;
 
-        if (db < -25f)
+        if (db < -35f && db >= -25f)
             return NoiseModerate;
 
         return NoiseNoisy;

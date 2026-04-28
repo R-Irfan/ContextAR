@@ -43,6 +43,8 @@ public class ObjectDetectionDwellTracker : MonoBehaviour
     private float _currentDwellSeconds;
     private bool _isTargetDetected;
     private DwellRange _currentRange = DwellRange.NotDetected;
+    [SerializeField] private float interactionFreezeSeconds = 2f;
+    private float _freezeUntilTime = -1f;
 
     public DwellRange CurrentRange => _currentRange;
     public float CurrentDwellSeconds => _currentDwellSeconds;
@@ -78,6 +80,11 @@ public class ObjectDetectionDwellTracker : MonoBehaviour
     private void Update()
     {
         RefreshState(Time.time);
+    }
+
+    public void FreezeDwellTemporarily()
+    {
+        _freezeUntilTime = Time.time + interactionFreezeSeconds;
     }
 
     private void Subscribe()
@@ -175,6 +182,15 @@ public class ObjectDetectionDwellTracker : MonoBehaviour
         if (float.IsNegativeInfinity(_dwellStartTime))
         {
             _dwellStartTime = now;
+        }
+
+        //_currentDwellSeconds = Mathf.Max(0f, now - _dwellStartTime);
+        //SetRange(EvaluateRange(_currentDwellSeconds));
+        if (now < _freezeUntilTime)
+        {
+            _dwellStartTime += Time.deltaTime;
+            SetRange(EvaluateRange(_currentDwellSeconds));
+            return;
         }
 
         _currentDwellSeconds = Mathf.Max(0f, now - _dwellStartTime);
