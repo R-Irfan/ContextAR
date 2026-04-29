@@ -11,12 +11,16 @@ public class IPInputUI : MonoBehaviour
     public TextMeshProUGUI statusText; // optional
     public ExperienceLayerController experienceLayerController;
     public GameObject AppConfigUICanvas;
+    private bool savedIP = false;
 
     private void Start()
     {
+        AppConfigUICanvas.SetActive(true);
+
         // Load saved IP into input field
         if (AppConfig.HasIP())
         {
+            savedIP = true;
             ipInputField.text = AppConfig.GetIP();
         }
 
@@ -29,8 +33,11 @@ public class IPInputUI : MonoBehaviour
 
         if (IPValidator.IsValidIPv4(ip))
         {
-            AppConfig.SetIP(ip+":8000");
-            experienceLayerController.serverUrl = AppConfig.GetIP();
+          
+            AppConfig.SetIP(ip);
+            
+            experienceLayerController.serverUrl = "http://" + AppConfig.GetIP()  + ":8000";
+            Debug.Log("Exp Layer Ctrl Server IP set to :" + experienceLayerController.serverUrl);
             SetStatus("IP Saved", Color.green);
             StartCoroutine(HideAPPConfigUI());
         }
@@ -41,12 +48,12 @@ public class IPInputUI : MonoBehaviour
     }
 
 	public void OnValueChanged(string value)
-{
+    {
     if (IPValidator.IsValidIPv4(value))
         ipInputField.image.color = Color.green;
     else
         ipInputField.image.color = Color.red;
-}
+    }
 
     private void SetStatus(string message, Color color)
     {
