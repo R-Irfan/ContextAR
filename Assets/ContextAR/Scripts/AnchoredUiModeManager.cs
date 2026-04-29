@@ -138,7 +138,7 @@ public class AnchoredUiModeManager : MonoBehaviour
         var crowd = NormalizeLevel(crowdLevel);
         var noise = NormalizeLevel(noiseLevel);
 
-        if(gazeDurationSeconds <= minGazeThresholdSeconds)
+        if (gazeDurationSeconds <= minGazeThresholdSeconds)
         {
             return UiMode.None;
         }
@@ -470,3 +470,4 @@ public class AnchoredUiModeManager : MonoBehaviour
         }
     }
 }
+
