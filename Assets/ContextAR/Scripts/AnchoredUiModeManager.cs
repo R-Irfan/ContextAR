@@ -44,6 +44,7 @@ public class AnchoredUiModeManager : MonoBehaviour
 
     [Header("Context Mapping")]
     [SerializeField] private bool autoSelectModeFromState = true;
+    [SerializeField, Min(0f)] private float minGazeThresholdSeconds = 0.5f;
     [SerializeField, Min(0f)] private float shortGazeThresholdSeconds = 5f;
     [SerializeField, Min(0f)] private float longGazeThresholdSeconds = 15f;
 
@@ -136,6 +137,11 @@ public class AnchoredUiModeManager : MonoBehaviour
     {
         var crowd = NormalizeLevel(crowdLevel);
         var noise = NormalizeLevel(noiseLevel);
+
+        if(gazeDurationSeconds <= minGazeThresholdSeconds)
+        {
+            return UiMode.None;
+        }
 
         if (gazeDurationSeconds < shortGazeThresholdSeconds)
         {

@@ -1633,7 +1633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExperienceLayerController
   capture: {fileID: 1676483528}
   uiManager: {fileID: 2071075788}
-  ttsManager: {fileID: 0}
+  ttsManager: {fileID: 1564024452}
   serverUrl: http://10.33.159.145:8000
   logServerResponses: 1
 --- !u!1 &94479355
@@ -3508,7 +3508,7 @@ GameObject:
   - component: {fileID: 215087244}
   - component: {fileID: 215087243}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: DebugScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5876,7 +5876,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 291, y: -665}
+  m_AnchoredPosition: {x: 291, y: -1094}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &402887719
@@ -5954,7 +5954,7 @@ MonoBehaviour:
   detectionVisualizer: {fileID: 1289561999}
   classLabelsFile: {fileID: 4900000, guid: 27c5d19f921778741afafca57507b074, type: 3}
   targetLabels:
-  - tv monitor
+  - laptop
   confidenceThreshold: 0.6
   useAllLabelsWhenSelectionEmpty: 0
   targetCanvas: {fileID: 406873905}
@@ -9270,7 +9270,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 382, y: -328}
+  m_AnchoredPosition: {x: 621, y: -698}
   m_SizeDelta: {x: 160, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &690809722
@@ -11328,7 +11328,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -588, y: -665}
+  m_AnchoredPosition: {x: -588, y: -1094}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &823680951
@@ -11441,7 +11441,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 690, y: -665}
+  m_AnchoredPosition: {x: 690, y: -1094}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &824613885
@@ -17056,7 +17056,7 @@ MonoBehaviour:
   detectionVisualizer: {fileID: 1289561999}
   classLabelsFile: {fileID: 4900000, guid: 27c5d19f921778741afafca57507b074, type: 3}
   targetLabels:
-  - tv monitor
+  - laptop
   confidenceThreshold: 0.6
   useAllLabelsWhenSelectionEmpty: 0
   targetCanvas: {fileID: 1171625988}
@@ -22449,7 +22449,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Painting Title Here
+  m_text: Loading Painting
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -23415,6 +23415,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4481d428032ae74ab82726f869dba6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+--- !u!114 &1564024452 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8447314216173079376, guid: b4de7a86f5bcc7c47aa7cf4f2edfaa19, type: 3}
+  m_PrefabInstance: {fileID: 1564024449}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 925117b5d9304364b9234d7d4444289d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1574626891
 GameObject:
   m_ObjectHideFlags: 0
@@ -23893,7 +23904,7 @@ MonoBehaviour:
   detectionVisualizer: {fileID: 1289561999}
   classLabelsFile: {fileID: 4900000, guid: 27c5d19f921778741afafca57507b074, type: 3}
   targetLabels:
-  - tv monitor
+  - laptop
   confidenceThreshold: 0.6
   useAllLabelsWhenSelectionEmpty: 0
   targetCanvas: {fileID: 1600453081}
@@ -24095,7 +24106,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 3500, y: 2000}
+  m_SizeDelta: {x: 3500, y: 3000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1602318294
 GameObject:
@@ -24237,7 +24248,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -147, y: -665}
+  m_AnchoredPosition: {x: -147, y: -1094}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1615944857
@@ -25409,7 +25420,7 @@ MonoBehaviour:
   metaAgent: {fileID: 1289562000}
   webcamAgent: {fileID: 1871444793}
   experienceLayerController: {fileID: 92924323}
-  targetLabel: tv monitor
+  targetLabel: laptop
   minConfidence: 0.6
   shortThresholdSeconds: 5
   longThresholdSeconds: 15
@@ -29977,6 +29988,7 @@ MonoBehaviour:
   enableAutoHide: 0
   fadeDurationSeconds: 2
   autoSelectModeFromState: 1
+  minGazeThresholdSeconds: 0.5
   shortGazeThresholdSeconds: 5
   longGazeThresholdSeconds: 15
   logTransitions: 0
@@ -32373,6 +32385,7 @@ SceneRoots:
   - {fileID: 1483284174}
   - {fileID: 1289562002}
   - {fileID: 816037710}
+  - {fileID: 1564024449}
   - {fileID: 243614628}
   - {fileID: 1171625989}
   - {fileID: 406873906}
@@ -32386,4 +32399,3 @@ SceneRoots:
   - {fileID: 215087246}
   - {fileID: 187032111}
   - {fileID: 1509000458}
-  - {fileID: 1564024449}
