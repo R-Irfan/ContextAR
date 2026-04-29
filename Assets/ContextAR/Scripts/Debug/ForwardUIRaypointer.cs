@@ -8,6 +8,7 @@ public class ForwardUIRayPointer : MonoBehaviour
 
     [Header("Pointer Sphere (assign in Inspector)")]
     public Transform pointerSphere;
+    public Camera cameraEyes;
 
     void Start()
     {
@@ -21,25 +22,32 @@ public class ForwardUIRayPointer : MonoBehaviour
         pointerSphere.gameObject.SetActive(false);
     }
 
+    public Ray GetGazeRay()
+    {
+        return new Ray(transform.position, transform.forward);
+    }
+
     void Update()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+        pointerSphere.transform.position = cameraEyes.transform.position + cameraEyes.transform.forward * 2f;
+        
+        //Ray ray = new Ray(transform.position, transform.forward);
 
-        Debug.DrawRay(ray.origin, ray.direction * maxDistance, Color.green);
+        //Debug.DrawRay(ray.origin, ray.direction * maxDistance, Color.green);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, uiLayer))
-        {
-            pointerSphere.gameObject.SetActive(true);
+        //if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, uiLayer))
+        //{
+        //    pointerSphere.gameObject.SetActive(true);
 
-            pointerSphere.position = hit.point;
+        //    pointerSphere.position = hit.point;
 
-            pointerSphere.rotation =
-                Quaternion.LookRotation(hit.normal);
-        }
-        else
-        {
-            pointerSphere.gameObject.SetActive(false);
-        }
+        //    pointerSphere.rotation =
+        //        Quaternion.LookRotation(hit.normal);
+        //}
+        //else
+        //{
+        //    pointerSphere.gameObject.SetActive(false);
+        //}
 
     }
 }
