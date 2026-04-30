@@ -6334,7 +6334,6 @@ MonoBehaviour:
   classLabelsFile: {fileID: 4900000, guid: 27c5d19f921778741afafca57507b074, type: 3}
   targetLabels:
   - tv monitor
-  - laptop
   confidenceThreshold: 0.6
   useAllLabelsWhenSelectionEmpty: 0
   targetCanvas: {fileID: 406873905}
@@ -18237,7 +18236,6 @@ MonoBehaviour:
   classLabelsFile: {fileID: 4900000, guid: 27c5d19f921778741afafca57507b074, type: 3}
   targetLabels:
   - tv monitor
-  - laptop
   confidenceThreshold: 0.6
   useAllLabelsWhenSelectionEmpty: 0
   targetCanvas: {fileID: 1171625988}
@@ -25154,7 +25152,6 @@ MonoBehaviour:
   classLabelsFile: {fileID: 4900000, guid: 27c5d19f921778741afafca57507b074, type: 3}
   targetLabels:
   - tv monitor
-  - laptop
   confidenceThreshold: 0.6
   useAllLabelsWhenSelectionEmpty: 0
   targetCanvas: {fileID: 1600453081}
@@ -26916,7 +26913,7 @@ MonoBehaviour:
   metaAgent: {fileID: 1289562000}
   webcamAgent: {fileID: 1871444793}
   experienceLayerController: {fileID: 92924323}
-  targetLabel: laptop
+  targetLabel: tv monitor
   minConfidence: 0.6
   shortThresholdSeconds: 5
   longThresholdSeconds: 15
@@ -31783,7 +31780,7 @@ MonoBehaviour:
   enableAutoHide: 0
   fadeDurationSeconds: 2
   autoSelectModeFromState: 1
-  minGazeThresholdSeconds: 0.5
+  minGazeThresholdSeconds: 0.2
   shortGazeThresholdSeconds: 5
   longGazeThresholdSeconds: 15
   logTransitions: 0
