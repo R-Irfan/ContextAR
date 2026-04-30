@@ -220,7 +220,7 @@ http://localhost:8000/health
 
 | Name            | Role                | Responsibilities              
 | ---------       | ------------        | ----------------------------- 
-| Adrian Leon     | PHD Student XR, BCI | Unity, XR UI, Integration     
+| Adrian Leon     | PHD Student XR, BCI | Unity, XR, AI, UI, Crowd, noise detection, Project Management     
 | Jia-Yin Shiu    | AI Engineer         | RAG, FastAPI, GPT integration
 | Yuxuan Tu       | Designer            | UI/UX, Figma
 | Irfan R         | XR Developer        | Unity, XR, Voice Services, UI 
