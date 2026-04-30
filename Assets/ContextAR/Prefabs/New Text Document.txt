@@ -1,0 +1,70 @@
+{
+  "paintings": [
+    {
+      "id": "harvesters",
+      "title": "The Harvesters",
+      "artistYear": "Pieter Bruegel the Elder · 1565",
+      "glance": "Bruegel · 1565",
+      "briefInfo": "A sweeping summer landscape showing peasant farmers resting and working during the wheat harvest in Flanders.",
+      "fullStory": "Painted in 1565 as part of a series depicting the months of the year, The Harvesters captures the height of summer with extraordinary detail. Bruegel portrays peasant life with dignity — workers rest under a pear tree, eat their midday meal, and labor in the golden fields. The vast aerial perspective and warm amber palette make this one of the most celebrated landscape paintings in Western art.",
+      "fullDetails": "Medium: Oil on wood | Dimensions: 46.5 x 63.3 in. | Location: The Metropolitan Museum of Art, New York",
+      "fullArtist": "Pieter Bruegel the Elder (c. 1525–1569) was the most significant Flemish Renaissance painter. Known for his landscapes and peasant scenes, he captured rural life with both realism and symbolic depth.",
+      "prompt": "Find a quieter spot for the full guide 🎧"
+    },
+    {
+      "id": "vermeer",
+      "title": "Young Woman with a Water Pitcher",
+      "artistYear": "Johannes Vermeer · c. 1662",
+      "glance": "Vermeer · c. 1662",
+      "briefInfo": "A quiet domestic scene bathed in cool northern light — Vermeer's mastery of light and texture at its finest.",
+      "fullStory": "This intimate work exemplifies Vermeer's extraordinary ability to transform an ordinary moment into a meditation on light and space. A young woman stands at a window, holding a silver pitcher and opening the casement. The diffused morning light from the left illuminates the white linen map, the blue tablecloth, and her headdress with breathtaking subtlety. The painting radiates stillness and quiet contemplation.",
+      "fullDetails": "Medium: Oil on canvas | Dimensions: 18 x 16 in. | Location: The Metropolitan Museum of Art, New York",
+      "fullArtist": "Johannes Vermeer (1632–1675) was a Dutch Golden Age master renowned for his interior scenes and unparalleled treatment of natural light. He produced fewer than 40 known paintings in his lifetime.",
+      "prompt": "Find a quieter spot for the full guide 🎧"
+    },
+    {
+      "id": "rembrandt",
+      "title": "Aristotle with a Bust of Homer",
+      "artistYear": "Rembrandt van Rijn · 1653",
+      "glance": "Rembrandt · 1653",
+      "briefInfo": "Rembrandt's most ambitious commission — a philosopher contemplating the poet, wealth, and the life of the mind.",
+      "fullStory": "Commissioned by a Sicilian nobleman, this is one of Rembrandt's most psychologically rich works. Aristotle, dressed in a black robe and elaborate gold chain — a gift from his former pupil Alexander the Great — rests his hand on a marble bust of the blind poet Homer. His expression suggests deep reverie: is he envying Homer's freedom from worldly ambition, or mourning his own compromises? The chain of gold becomes a symbol of fame's burden.",
+      "fullDetails": "Medium: Oil on canvas | Dimensions: 56.5 x 53.75 in. | Location: The Metropolitan Museum of Art, New York",
+      "fullArtist": "Rembrandt van Rijn (1606–1669) is widely regarded as one of the greatest painters in European art history, celebrated for his psychological depth, mastery of light, and prolific output of portraits and biblical scenes.",
+      "prompt": "Find a quieter spot for the full guide 🎧"
+    },
+    {
+      "id": "sargent",
+      "title": "Madame X (Madame Pierre Gautreau)",
+      "artistYear": "John Singer Sargent · 1883–84",
+      "glance": "Sargent · 1883–84",
+      "briefInfo": "A scandalous portrait that nearly ended Sargent's career — now considered one of the masterpieces of American art.",
+      "fullStory": "When this portrait debuted at the 1884 Paris Salon, it caused a sensation. The subject, American socialite Virginie Amelie Avegno Gautreau, was shown with her right strap slipping off her shoulder — a detail Sargent later repainted. The lavender-powdered skin, black gown, and imperious profile were seen as vulgar and provocative. Sargent left Paris in embarrassment, but today the painting is celebrated for its bold psychology and technical brilliance.",
+      "fullDetails": "Medium: Oil on canvas | Dimensions: 82.125 x 43.25 in. | Location: The Metropolitan Museum of Art, New York",
+      "fullArtist": "John Singer Sargent (1856–1925) was an American expatriate artist considered the leading portrait painter of his generation, known for his dazzling brushwork and ability to capture personality.",
+      "prompt": "Find a quieter spot for the full guide 🎧"
+    },
+    {
+      "id": "vangogh",
+      "title": "Wheat Field with Cypresses",
+      "artistYear": "Vincent van Gogh · 1889",
+      "glance": "Van Gogh · 1889",
+      "briefInfo": "Painted at Saint-Remy asylum — swirling cypresses expressing inner turbulence and hope.",
+      "fullStory": "Van Gogh painted this masterpiece during his voluntary stay at the Saint-Paul-de-Mausole asylum in Saint-Remy, Provence. The towering dark cypress trees — which he called 'beautiful as Egyptian obelisks' — dominate the composition, their flame-like forms echoing the swirling clouds above. The golden wheat below suggests life and hope, while the turbulent sky reflects his emotional state. It is one of three closely related versions he produced that summer.",
+      "fullDetails": "Medium: Oil on canvas | Dimensions: 28.8 x 36.8 in. | Location: The Metropolitan Museum of Art, New York",
+      "fullArtist": "Vincent van Gogh (1853–1890) was a Dutch Post-Impressionist whose intense, expressive brushwork and vivid color palette profoundly influenced 20th-century art. He produced over 2,100 works in just a decade.",
+      "prompt": "Find a quieter spot for the full guide 🎧"
+    },
+    {
+      "id": "cezanne",
+      "title": "The Card Players",
+      "artistYear": "Paul Cézanne · c. 1890–95",
+      "glance": "Cézanne · c. 1890–95",
+      "briefInfo": "Cézanne's iconic series of card players — a bridge between Impressionism and the birth of modern art.",
+      "fullStory": "The Card Players is one of a series of five paintings Cézanne made of Provencal peasants playing cards, based on figures from his estate near Aix-en-Provence. The Metropolitan's version, with three players and a standing observer, captures an extraordinary stillness. The simplified, almost sculptural figures, the muted palette of blues, greens, and ochres, and the geometric composition directly influenced the Cubists — making this a pivotal work in the history of modern art.",
+      "fullDetails": "Medium: Oil on canvas | Dimensions: 25.75 x 32.25 in. | Location: The Metropolitan Museum of Art, New York",
+      "fullArtist": "Paul Cézanne (1839–1906) was a French Post-Impressionist painter whose work laid the foundations for 20th-century art movements including Cubism and Fauvism. He is often called the father of modern art.",
+      "prompt": "Find a quieter spot for the full guide 🎧"
+    }
+  ]
+}
