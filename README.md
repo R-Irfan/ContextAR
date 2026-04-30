@@ -1,239 +1,130 @@
 # 🎮 ContextAR – Muse
 
-> *An adaptive XR museum companion that intelligently adjusts content depth using real-world context.*
+> **An AI-powered XR museum companion that adapts to user attention and environment in real time.**
 
 ---
 
-## 📌 Overview
+## 🏷️ Badges
 
-**ContextAR – Muse** is an AI-powered XR application designed to enhance museum visits through context-aware interaction. Instead of static descriptions, the system dynamically adapts how information is presented—ranging from minimal glanceable insights to full conversational AI—based on user attention and environmental conditions.
-
-The experience is designed to behave like **AI-powered smart glasses**, understanding:
-
-* What the user is looking at
-* How long they are engaged
-* The surrounding environment (noise, crowd)
+![Unity](https://img.shields.io/badge/Engine-Unity-black?logo=unity)
+![XR](https://img.shields.io/badge/Platform-XR%20%7C%20Meta%20Quest-blueviolet)
+![AI](https://img.shields.io/badge/AI-GPT--4o%20%7C%20RAG-green)
+![Hackathon](https://img.shields.io/badge/Built%20For-Hackathon-orange)
+![Status](https://img.shields.io/badge/Status-Prototype-yellow)
 
 ---
 
-## 🚀 Core Concept
+## 🎥 Demo (Watch First)
 
-ContextAR replaces traditional museum guides with an adaptive system:
-
-* Walking by → No interruption
-* Brief attention → Short contextual info
-* Deep engagement → Full AI-driven experience
+[![Watch Demo](https://img.youtube.com/vi/uVUPJRyVCUM/0.jpg)](https://www.youtube.com/watch?v=uVUPJRyVCUM)
 
 ---
 
-## 🧠 Key Features
+## 🚨 The Problem
 
-### 🎯 Context-Aware UI Adaptation
+Museum experiences today are:
 
-* Driven by:
+* Static and one-size-fits-all
+* Overwhelming or under-informative
+* Not adaptive to user attention or environment
 
-  * Gaze duration
-  * Crowd density
-  * Ambient noise
-* Dynamically selects the most appropriate UI mode
-
----
-
-### 🎤 Voice Interaction (Hands-Free)
-
-* Speech-to-Text (STT) for user queries
-* Text-to-Speech (TTS) for responses
-* Supports seamless conversational flow
+Visitors either **miss context** or **get overloaded**.
 
 ---
 
-### 👁️ On-Device Perception
+## 💡 Our Solution
 
-* Exhibit detection (on-device vision)
-* Crowd detection
-* Noise level estimation
-* Gaze tracking
+**ContextAR transforms museum visits into adaptive, intelligent experiences.**
 
----
+It behaves like **AI-powered smart glasses** that:
 
-### 🤖 AI-Powered Knowledge System
+* Understand what you're looking at
+* Measure how engaged you are
+* Sense your surroundings
 
-* Retrieval-Augmented Generation (RAG)
-* FAISS vector search for museum knowledge base
-* GPT-4o for response generation
-* Ensures accurate, context-aligned answers
+And then **adjust the experience automatically**.
 
 ---
 
-### 🎨 Adaptive XR UI System
+## ⚡ Key Innovation
 
-* UI scales to match real-world painting size
-* Handles temporary loss of object tracking
-* Optimized for passthrough XR environments
+> **Context-aware content delivery in XR**
+
+The system decides:
+
+* When to stay silent
+* When to show minimal info
+* When to enable full AI conversation
 
 ---
 
-## 🏗️ System Architecture
+## 🧠 How It Works
 
-### End-to-End Flow
-
-```
-Unity (Meta Quest)
- ├── Object Detection (on-device)
- ├── STT (user question)
- ├── Crowd / Noise / Gaze tracking
-        ↓
-POST /ask → Python AI Server
-        ↓
+```plaintext
+User (XR Headset)
+   ↓
+On-device perception
+(exhibit + gaze + crowd + noise)
+   ↓
+POST /ask → AI Server
+   ↓
 Context Router
-        ↓
-RAG (Knowledge Base)
-        ↓
-GPT-4o (Answer Generation)
-        ↓
+   ↓
+RAG + GPT-4o
+   ↓
 { mode, answer }
-        ↓
-Unity
- ├── TTS plays response
- └── UI adapts based on mode
+   ↓
+Adaptive UI + Voice Output
 ```
 
 ---
 
-## 🔄 Context Routing Logic
+## 🎯 Smart Adaptation
 
-| Gaze Duration | Crowd   | Noise | Mode                |
-| ------------- | ------- | ----- | ------------------- |
-| < 5s          | Any     | Any   | NO_RESPONSE         |
-| 5–15s         | Low     | Quiet | BRIEF_TEXT          |
-| 5–15s         | Low     | Noisy | BRIEF_TEXT          |
-| 5–15s         | Crowded | Any   | GLANCE_CARD         |
-| > 15s         | Low     | Quiet | FULL_VOICE          |
-| > 15s         | Low     | Noisy | FULL_VOICE          |
-| > 15s         | Crowded | Any   | BRIEF_TEXT + Prompt |
+| Situation        | System Behavior              |
+| ---------------- | ---------------------------- |
+| Passing by (<5s) | No interruption              |
+| Brief glance     | Short contextual info        |
+| Deep engagement  | Full AI conversation         |
+| Crowded/noisy    | Minimal or guided experience |
 
 ---
 
-## 🎨 UI Behavior Design
+## 🎨 Experience Modes
 
-| Gaze Time | Environment   | UI Mode        | Description               |
-| --------- | ------------- | -------------- | ------------------------- |
-| < 5s      | Any           | No UI          | Clean passthrough         |
-| 5–15s     | Quiet         | Brief Text     | Title + short description |
-| 5–15s     | Noisy/Crowded | Glance Card    | Minimal info              |
-| > 15s     | Quiet         | Full Menu      | Full AI interaction       |
-| > 15s     | Noisy/Crowded | Brief + Prompt | Suggest quieter spot      |
+* **No UI** → Clean real-world view
+* **Glance Card** → 1-line info
+* **Brief Text** → Short description
+* **Full Experience** → AI + audio + exploration
 
 ---
 
-## 🌐 Server Connection (Unity ↔ AI Backend)
+## 🌐 Server Connection (Unity ↔ AI)
 
-Before using AI features, the app must connect to the local AI server.
-
-### 🔌 Initial Setup
-
-* User enters server IP address on first launch
+* User enters **local AI server IP** on first launch
+* Stored using PlayerPrefs
 * Example:
 
-```
+```bash
 http://192.168.1.10:8000
 ```
 
 ---
 
-### 💾 Persistence
-
-* Stored using Unity **PlayerPrefs**
-* Automatically reused on next launch
-* Can be updated via settings UI
-
----
-
-### 🔄 Connection Flow
-
-1. User enters server IP
-2. Unity stores it locally
-3. Requests sent to:
-
-```
-{SERVER_IP}/ask
-```
-
-4. Server returns:
-
-```
-{ mode, answer }
-```
-
-5. Unity:
-
-   * Plays response via TTS
-   * Updates UI based on mode
-
----
-
-### ⚠️ Validation Notes
-
-* Must include `http://`
-* Ensure correct port (default: 8000)
-* Device and server must be on same network
-
----
-
-### 🧪 Testing
-
-* Test endpoint:
-
-```
-http://<IP>:8000/health
-```
-
-* Ensure server is running before launching app
-
----
-
 ## 🛠️ Tech Stack
 
-### 🎮 Frontend (XR)
+**XR Layer**
 
-* Unity 6 (6000.3.13f or higher)
-* Meta Quest XR SDK
-* Meta AI Building Blocks
+* Unity 6
+* Meta Quest SDK
 * Meta STT / TTS
 
----
+**AI Layer**
 
-### 🧠 Backend (AI Server)
-
-* Python (FastAPI)
-* GPT-4o / GPT-4o Vision
+* FastAPI (Python)
+* GPT-4o + Vision
+* RAG + FAISS
 * OpenAI Embeddings
-* FAISS
-
----
-
-### 🎨 Tools
-
-* Figma (UI/UX design)
-* On-device object detection
-
----
-
-## 📂 Project Structure
-
-```
-Assets/
-|── ContextAR
-│   |── Scripts/
-│   ├── Prefabs/
-│   ├── UI/
-│   ├── Scenes/
-|   |── Textures 
-│
-│── 
-│── 
-│── XR/
-```
 
 ---
 
@@ -247,72 +138,149 @@ git clone https://github.com/your-username/contextar-muse.git
 
 ---
 
-### 2. Open in Unity
+### 2. Unity Setup
 
-* Open Unity Hub
-* Add project folder
-* Use Unity ≥ 6000.3.13f
-
----
-
-### 3. Configure XR
-
+* Open project in Unity Hub
+* Use Unity version ≥ **6000.3.13f**
 * Enable XR Plugin Management
-* Setup Meta Quest
+* Configure Meta Quest
 
 ---
 
-### 4. Setup AI Server
+### 3. AI Server Setup
 
-Follow:
-https://github.com/jeannineshiu/ContextAR-AI
+The AI backend powers context-aware responses using RAG + GPT.
+
+👉 Repository: https://github.com/jeannineshiu/ContextAR-AI
+
+#### Steps:
+
+```bash
+# Clone AI server
+git clone https://github.com/jeannineshiu/ContextAR-AI.git
+cd ContextAR-AI
+```
+
+```bash
+# Create virtual environment
+python -m venv venv
+```
+
+```bash
+# Activate environment
+# Windows:
+venv\Scripts\activate
+
+# Mac/Linux:
+source venv/bin/activate
+```
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+```
 
 ---
 
-### 5. Run Project
+#### 🔑 Configure Environment Variables
+
+Create a `.env` file in the root:
+
+```env
+OPENAI_API_KEY=your_api_key_here
+```
+
+---
+
+#### ▶️ Run Server
+
+```bash
+uvicorn server:app --host 0.0.0.0 --port 8000
+```
+
+---
+
+#### ✅ Test Server
+
+Open in browser:
+
+```bash
+http://localhost:8000/health
+```
+
+---
+
+### 4. Connect Unity to Server
+
+* Launch the Unity app
+* Enter server IP:
+
+```bash
+http://<YOUR_PC_IP>:8000
+```
+
+* Ensure:
+
+  * Same Wi-Fi network
+  * Firewall allows connection
+
+---
+
+### 5. Run Full System
 
 1. Start AI server
 2. Launch Unity scene
-3. Enter server IP
-4. Begin interaction
+3. Wear headset
+4. Look at exhibit and interact
 
 ---
 
-## ⚠️ Known Limitations
+## 🚀 Why This Matters
 
-* Requires stable local network
-* Detection depends on lighting/visibility
-* Crowd/noise estimation is heuristic-based
+* Makes museums **interactive without friction**
+* Reduces cognitive overload
+* Enables **personalized learning at scale**
+* Bridges physical + digital storytelling
 
 ---
 
-## 🔮 Future Improvements
+## 🧪 What Makes It Unique
+
+* Real-time **context routing engine**
+* Combines **perception + AI + XR UI adaptation**
+* Designed for **AI glasses future**
+
+---
+
+## 🔮 Future Scope
 
 * Fully on-device AI
 * Multi-language support
-* Personalized museum tours
-* Cloud-based knowledge sync
+* Personalized tours
+* Cloud museum integration
 
 ---
 
-## 🤝 Contribution
+## 👥 Team
 
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
-
----
-
-## 📄 License
-
-Specify your license (e.g., MIT)
+| Name      | Role         | Responsibilities              | Contact           |
+| --------- | ------------ | ----------------------------- | ----------------- |
+| Your Name | XR Developer | Unity, XR UI, Integration     | GitHub / LinkedIn |
+| Member 2  | AI Engineer  | RAG, FastAPI, GPT integration | GitHub / LinkedIn |
+| Member 3  | Designer     | UI/UX, Figma                  | Portfolio         |
+| Member 4  | Product      | Concept, testing              | LinkedIn          |
 
 ---
 
 ## 📬 Contact
 
-* Project: **ContextAR – Muse**
-* Team: *Add team members*
-* GitHub: *Add repository link*
+* GitHub: https://github.com/your-username
+* Email: [your@email.com](mailto:your@email.com)
+
+---
+
+## 📄 License
+
+MIT License
 
 ---
