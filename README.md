@@ -1,4 +1,4 @@
-# 🎮 ContextAR – Muse
+# ContextAR – Muse
 
 > **An AI-powered XR museum companion that adapts to user attention and environment in real time.**
 
