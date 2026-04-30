@@ -4,19 +4,18 @@
 
 ---
 
+## 🎥 Demo (Watch First)
+
+[![Watch Demo](https://img.youtube.com/vi/uVUPJRyVCUM/0.jpg)](https://www.youtube.com/watch?v=uVUPJRyVCUM)
+
+---
+
 ## 🏷️ Badges
 
 ![Unity](https://img.shields.io/badge/Engine-Unity-black?logo=unity)
 ![XR](https://img.shields.io/badge/Platform-XR%20%7C%20Meta%20Quest-blueviolet)
 ![AI](https://img.shields.io/badge/AI-GPT--4o%20%7C%20RAG-green)
-![Hackathon](https://img.shields.io/badge/Built%20For-Hackathon-orange)
 ![Status](https://img.shields.io/badge/Status-Prototype-yellow)
-
----
-
-## 🎥 Demo (Watch First)
-
-[![Watch Demo](https://img.youtube.com/vi/uVUPJRyVCUM/0.jpg)](https://www.youtube.com/watch?v=uVUPJRyVCUM)
 
 ---
 
@@ -133,7 +132,7 @@ http://192.168.1.10:8000
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-username/contextar-muse.git
+git clone https://github.com/R-Irfan/ContextAR.git
 ```
 
 ---
@@ -153,44 +152,7 @@ The AI backend powers context-aware responses using RAG + GPT.
 
 👉 Repository: https://github.com/jeannineshiu/ContextAR-AI
 
-#### Steps:
-
-```bash
-# Clone AI server
-git clone https://github.com/jeannineshiu/ContextAR-AI.git
-cd ContextAR-AI
-```
-
-```bash
-# Create virtual environment
-python -m venv venv
-```
-
-```bash
-# Activate environment
-# Windows:
-venv\Scripts\activate
-
-# Mac/Linux:
-source venv/bin/activate
-```
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-```
-
----
-
-#### 🔑 Configure Environment Variables
-
-Create a `.env` file in the root:
-
-```env
-OPENAI_API_KEY=your_api_key_here
-```
-
----
+Follow instructions to setup the server
 
 #### ▶️ Run Server
 
@@ -210,15 +172,6 @@ http://localhost:8000/health
 
 ---
 
-### 4. Connect Unity to Server
-
-* Launch the Unity app
-* Enter server IP:
-
-```bash
-http://<YOUR_PC_IP>:8000
-```
-
 * Ensure:
 
   * Same Wi-Fi network
@@ -229,9 +182,11 @@ http://<YOUR_PC_IP>:8000
 ### 5. Run Full System
 
 1. Start AI server
-2. Launch Unity scene
-3. Wear headset
-4. Look at exhibit and interact
+2. Wear headset
+3. Launch the app
+4. Enter Server IP address
+5. Look at exhibit and interact
+6. Ask questions and listen the context aware AI responses
 
 ---
 
@@ -263,19 +218,12 @@ http://<YOUR_PC_IP>:8000
 
 ## 👥 Team
 
-| Name      | Role         | Responsibilities              | Contact           |
-| --------- | ------------ | ----------------------------- | ----------------- |
-| Your Name | XR Developer | Unity, XR UI, Integration     | GitHub / LinkedIn |
-| Member 2  | AI Engineer  | RAG, FastAPI, GPT integration | GitHub / LinkedIn |
-| Member 3  | Designer     | UI/UX, Figma                  | Portfolio         |
-| Member 4  | Product      | Concept, testing              | LinkedIn          |
-
----
-
-## 📬 Contact
-
-* GitHub: https://github.com/your-username
-* Email: [your@email.com](mailto:your@email.com)
+| Name            | Role                | Responsibilities              
+| ---------       | ------------        | ----------------------------- 
+| Adrian Leon     | PHD Student XR, BCI | Unity, XR UI, Integration     
+| Jia-Yin Shiu    | AI Engineer         | RAG, FastAPI, GPT integration
+| Yuxuan Tu       | Designer            | UI/UX, Figma
+| Irfan R         | XR Developer        | Unity, XR, Voice Services, UI 
 
 ---
 
